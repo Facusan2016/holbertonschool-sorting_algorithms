@@ -1,7 +1,7 @@
 # include "sort.h"
 
 /**
- * bubble_sort - sort a array with bubble algorithm
+ * bubble_sort - sort a array with bubble
  * @array: array to sort
  * @size: size of the array
  */
