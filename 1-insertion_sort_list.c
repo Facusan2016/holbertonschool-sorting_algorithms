@@ -1,34 +1,45 @@
 # include "sort.h"
 
-void swap_list(listint_t *curr, listint_t *next_one)
+/**
+ * swap_list - swap two adjacent nodes in a doubly linked list
+ * @curr: pointer to the current node to be swapped
+ * @prev_one: pointer to the previous node before curr
+ */
+void swap_list(listint_t *curr, listint_t *prev_one)
 {
-	listint_t *curr_prev = curr->prev;
-	listint_t *next_one_next = next_one->next;
-
-	if (curr_prev)
-		(curr_prev)->next = next_one;
-
-	(next_one)->prev = curr_prev;
-	(next_one)->next = curr;
-	(curr)->prev = next_one;
-	(curr)->next = next_one_next;
-
-	if (next_one_next)
-		(next_one_next)->prev = curr;
+	if (prev_one)
+		(prev_one)->next = (curr)->next;
+	if ((curr)->next)
+		(curr)->next->prev = prev_one;
+	if (prev_one && (prev_one)->prev)
+		(prev_one)->prev->next = curr;
+	if ((curr)->prev)
+		(curr)->prev = (prev_one)->prev;
+	(prev_one)->prev = curr;
+	(curr)->next = prev_one;
 }
 
+/**
+ * insertion_sort_list - sort a doubly linked list using insertion sort
+ * @list: pointer to a pointer to the head of the list
+ */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *curr = *list;
+	listint_t *curr = NULL;
 
-	while (curr->next)
+	if (!list || !*list || !(*list)->next)
+		return;
+
+	curr = (*list)->next;
+
+	while (curr)
 	{
-		print_list(*list);
-		while ((curr)->next && ((curr)->n > (curr)->next->n))
+		while ((curr)->prev && ((curr)->n < (curr)->prev->n))
 		{
-			printf("Curr: %d, Next: %d\n", (curr)->n, (curr)->next->n);
-			swap_list(curr, (curr)->next);
-			curr = (curr)->prev;
+			swap_list(curr, (curr)->prev);
+			if (!(curr)->prev)
+				*list = curr;
+			print_list(*list);
 		}
 		curr = (curr)->next;
 	}
